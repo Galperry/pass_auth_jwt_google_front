@@ -16,11 +16,15 @@ export default function List() {
     function submitDelete(id){
         axios.delete(`http://localhost:5000/api/employees/${id}`).then((response)=>{
             setMessage(response.data.message)
+            setTimeout(() => {
+                setMessage("")
+            }, 3000);
         })
     }
+    console.log(list)
     return (
         <div className="container">
-            <div className="alert alert-success">{message}</div>
+            <div className={`alert alert-success ${message?"":"d-none"}`}>{message}</div>
             {list &&
             <table className="table">
                 <thead className="thead-dark">
@@ -41,8 +45,8 @@ export default function List() {
                     {list.map((employee)=>
                         <tr>
                             <td scope="row">{employee.EmployeeID}</td>
-                            <td><img src={`https://randomuser.me/api/portraits/men/${employee.EmployeeID}.jpg`}
-                                alt="{ employee.FirstName }" /></td>
+                            <td><img src={`http://localhost:5000/${employee.PhotoPath}`}
+                                alt={ employee.FirstName } /></td>
                             <td>{ employee.FirstName }</td>
                             <td>{ employee.LastName }</td>
                             <td>{ employee.Title }</td>
