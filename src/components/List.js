@@ -3,27 +3,30 @@ import {Link} from 'react-router-dom'
 import axios from 'axios'
 
 export default function List() {
+    let Authorization = `bearer ${JSON.parse(localStorage.getItem("token"))}`
+    console.log(Authorization)
     const [list, setList]= useState(null)
     const [message, setMessage] = useState(null)
 
     useEffect(() => {
-        axios.get("http://localhost:5000/api/employees").then((response)=>{
-            setList(response.data.recordset)
+        axios.get("http://localhost:5000/api/employees", {headers: {Authorization}}).then((response)=>{
+            setList(response.data)
         })
    
     }, [message])
 
     function submitDelete(id){
-        axios.delete(`http://localhost:5000/api/employees/${id}`).then((response)=>{
+        axios.delete(`http://localhost:5000/api/employees/${id}`, {headers: {Authorization}}).then((response)=>{
             setMessage(response.data.message)
             setTimeout(() => {
                 setMessage("")
             }, 3000);
         })
     }
-    console.log(list)
     return (
         <div className="container">
+            <h1>Employees List</h1>
+            <p>Welcome to Employees List</p>
             <div className={`alert alert-success ${message?"":"d-none"}`}>{message}</div>
             {list &&
             <table className="table">
@@ -43,18 +46,18 @@ export default function List() {
                 </thead>
                 <tbody>
                     {list.map((employee)=>
-                        <tr>
-                            <td scope="row">{employee.EmployeeID}</td>
-                            <td><img src={`http://localhost:5000/${employee.PhotoPath}`}
+                        <tr key={employee._id}>
+                            <td>{employee._id}</td>
+                            <td><img width="120px" src={`http://localhost:5000/${employee.PhotoPath}`}
                                 alt={ employee.FirstName } /></td>
                             <td>{ employee.FirstName }</td>
                             <td>{ employee.LastName }</td>
                             <td>{ employee.Title }</td>
                             <td className="d-print-none">
-                                <Link to={`/employee/${employee.EmployeeID}`} className="btn btn-sm btn-warning">
+                                <Link to={`/employee/${employee._id}`} className="btn btn-sm btn-warning">
                                     Edit
                                 </Link>
-                                <button className="btn btn-sm btn-danger delete-button" onClick={()=>submitDelete(employee.EmployeeID)} >Delete</button>
+                                <button className="btn btn-sm btn-danger delete-button" onClick={()=>submitDelete(employee._id)} >Delete</button>
                             </td>
                         </tr>
                     )}
