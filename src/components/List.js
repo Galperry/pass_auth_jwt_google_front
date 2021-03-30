@@ -4,7 +4,6 @@ import axios from 'axios'
 
 export default function List() {
     let Authorization = `bearer ${JSON.parse(localStorage.getItem("token"))}`
-    console.log(Authorization)
     const [list, setList]= useState(null)
     const [message, setMessage] = useState(null)
 

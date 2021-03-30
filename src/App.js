@@ -15,6 +15,7 @@ function App() {
         <Route path="/addemployee" component={AddEmployee}/>
         <Route path="/employee/:id" component={EmployeePage}/>
         <Route path="/login" component={LoginPage}/>
+        <Route path="/token/:token" component={LoginPage}/>
       </Router>
     </div>
   );
